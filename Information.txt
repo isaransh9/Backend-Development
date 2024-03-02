@@ -1,0 +1,9 @@
+Question => Why we have made .end.sample file ==> Just to give third person a reference
+
+We made few changes to the package.json file
+1) "type": "module" ==> We will be using import module syntax
+2) "dev": "nodemon src/index.js" ==> For starting the server using simple command
+
+Question => Why we are using prettier package?
+Because when you work with a team then it may happen that different people are comfortable to different indentation or different formatting,etc. To keep things simple, we will uniform things by using prettier package.
+
