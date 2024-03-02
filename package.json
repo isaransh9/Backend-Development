@@ -1,0 +1,20 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "Backend Project with chai aur code",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.js"  
+  },
+  "keywords": [
+    "Javascript",
+    "Nodejs",
+    "ExpressJs"
+  ],
+  "author": "Saransh Meena",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
