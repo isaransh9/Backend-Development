@@ -20,5 +20,3 @@ We try to load environment variables as soon as possible so that they will be av
 It is always a good practice to print errors to the console, you will get idea to debugg them.
 
 Whenever you modify the environment variables you have to restart the server manually, nodemon will not be able to help you.
-
-

@@ -17,7 +17,17 @@ dotenv.config({
 // This means you environment variable will be loaded as soon as the application runs.
 // This is working fine
 
-connectDB();
+
+// Asynchronous method always returns a promise, we can use that 
+connectDB()
+  .then(() => {
+    app.listen(process.env.PORT || 3000, () => {
+      console.log(`Server listening at port :${process.env.PORT}`);
+    })
+  })
+  .catch((error) => {
+    console.log("MongoDb Connection Failed", error);
+  });
 
 
 
