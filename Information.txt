@@ -20,3 +20,11 @@ We try to load environment variables as soon as possible so that they will be av
 It is always a good practice to print errors to the console, you will get idea to debugg them.
 
 Whenever you modify the environment variables you have to restart the server manually, nodemon will not be able to help you.
+
+
+Why we have addded asyncHandler file in utils ?
+Whenever we will call a async function, we will use the asyncHandler function as a wrapper for execution of the async function. This will help us in future.
+
+Why we have addded ApiError and ApiResponse files in utils ?
+To override the default Error class provided by the node.
+
