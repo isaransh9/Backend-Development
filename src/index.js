@@ -3,10 +3,9 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from "./db/index.js";
-const app = express();
+import { app } from './app.js'
 
 // Second approach ==> Modularity
-
 // Recently introduced thing
 
 dotenv.config({
@@ -28,17 +27,6 @@ connectDB()
   .catch((error) => {
     console.log("MongoDb Connection Failed", error);
   });
-
-
-
-
-
-
-
-
-
-
-
 
 /*
 

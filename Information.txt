@@ -28,3 +28,6 @@ Whenever we will call a async function, we will use the asyncHandler function as
 Why we have addded ApiError and ApiResponse files in utils ?
 To override the default Error class provided by the node.
 
+In industry, usually two steps are being taken to upload files. First, they store the file in their local server and then it is uploaded to the cloud server. This is because if you failed to upload on the cloud server then there is chance of re-uploading.
+
+Import mai manchaha naam tbhi de skte hai jb export default kiya ho
