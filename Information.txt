@@ -31,3 +31,37 @@ To override the default Error class provided by the node.
 In industry, usually two steps are being taken to upload files. First, they store the file in their local server and then it is uploaded to the cloud server. This is because if you failed to upload on the cloud server then there is chance of re-uploading.
 
 Import mai manchaha naam tbhi de skte hai jb export default kiya ho
+
+When you upload a file on the cloudinary server then you receive these things in response 
+{
+  asset_id: '3a85ccdd1eac3b17432cb7c3766063d2',
+  public_id: 'bsgl0g3xy4d3g3jtwu3j',
+  version: 1710249845,
+  version_id: 'b6309b067a8fe8782325f01b59e02987',
+  signature: 'c39ca7a952a12d70985cd7427faea1e166e21a10',
+  width: 307,
+  height: 310,
+  format: 'png',
+  resource_type: 'image',
+  created_at: '2024-03-12T13:24:05Z',
+  tags: [],
+  bytes: 58932,
+  type: 'upload',
+  etag: 'e58eae92fe50dbd70103d043c7fa4001',
+  placeholder: false,
+  url: 'http://res.cloudinary.com/chaicode/image/upload/v1710249845/bsgl0g3xy4d3g3jtwu3j.png',
+  secure_url: 'https://res.cloudinary.com/chaicode/image/upload/v1710249845/bsgl0g3xy4d3g3jtwu3j.png',
+  folder: '',
+  original_filename: 'Avatar_Aang',
+  api_key: '274797692382471'
+}
+
+You get this when you try to console.log(req.body)
+[Object: null prototype] {
+  fullName: 'Saransh Meena',
+  email: 'saranshm10@gmail.com',
+  password: '12345678',
+  username: '_isaransh_'
+}
+
+

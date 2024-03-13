@@ -9,7 +9,7 @@ import { app } from './app.js'
 // Recently introduced thing
 
 dotenv.config({
-  path: './env'
+  path: './.env'
 });
 
 // For this to work ==> Modify package.json like this ==>     "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js"

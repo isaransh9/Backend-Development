@@ -1,4 +1,5 @@
 import { v2 as cloudinary } from 'cloudinary';
+import { log } from 'console';
 import { response } from 'express';
 import fs from 'fs'; // Inbuilt filesystem in nodejs
 
@@ -24,7 +25,8 @@ const uploadOnCloudinary = async (localFilePath) => {
       resource_type: "auto",
     });
     // File has been uploaded successfully
-    console.log("File has been uploaded successfully", response.url);
+    // console.log("File has been uploaded successfully", response.url);
+    fs.unlinkSync(localFilePath); // File uploaded successfully so, remove it from local server 
     return response;
   } catch (error) {
     fs.unlinkSync(localFilePath);
