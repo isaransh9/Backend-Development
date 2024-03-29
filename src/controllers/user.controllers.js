@@ -4,6 +4,7 @@ import { User } from '../models/user.model.js';
 import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -327,4 +328,137 @@ const updateUsercoverImage = asyncHandler(async (req, res) => {
   );
 })
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUsercoverImage }
+const getUserChannelProfile = asyncHandler(async (req, res) => {
+  const { username } = req.params;
+  console.log(username);
+  if (!username?.trim()) {
+    throw new ApiError(400, "Username is missing");
+  }
+
+  // const user = await User.findOne({ username: username });  // Should have done this but we can do it more optimistically using aggregation pipelines
+
+  const channel = await User.aggregate([
+    { // Pipeline 1 ==> Fetch detail from username
+      $match: {
+        username: username?.toLowerCase()
+      }
+    },
+    { // Pipeline 2 ==> Subscription model m jiska jiska channel match krta hai _id se unke docs save krega
+      //                subscribers nam ki field mein
+      $lookup: {
+        from: "subscriptions",
+        // database m sab lowercase aur plural form m save hote hain
+        localField: "_id",
+        foreignField: "channel",
+        as: "subscribers"
+      }
+    },
+    { // Pipeline 3 ==> Subscription model m jiska jiska subcriber match krta hai _id se unke docs save krega
+      //                subscribedto nam ki field mein
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "subscriber",
+        as: "subscribedto"
+      }
+    }
+    ,
+    {
+      $addFields: {
+        subscriberscount: {    // count number of subscribers
+          $size: "$subscribers"
+        },
+        channelsSubscribedToCount: {  // count number of channel subscribed by the user
+          $size: "$subscribedto"
+        },
+        issubscribed: {
+          $cond: {
+            if: { $in: [req.user?._id, "$subscribers.subscriber"] },
+            then: true,
+            else: false
+          }
+        }
+      }
+    }
+    ,
+    {
+      // List down those data fields which you will sent to the frontend
+      $project: {
+        fullName: 1,
+        username: 1,
+        subscriberscount: 1,
+        channelsSubscribedToCount: 1,
+        issubscribed: 1,
+        avatar: 1,
+        coverImage: 1,
+        email: 1
+      }
+    }
+  ]);
+
+  // Data type of channel will be ==> array of objects
+  console.log(channel);
+
+  if (!channel?.length) {
+    throw new ApiError(404, "Channel does not exist");
+  }
+
+  return res.status(200).json(
+    new ApiResponse(200, channel[0], "User channel fetched successfully")
+  )
+  // channel[0] will contain the user id 
+})
+
+const getWatchHistory = asyncHandler(async (req, res) => {
+  const user = await User.aggregate([
+    {
+      $match: {
+        _id: new mongoose.Types.ObjectId(req.user._id)
+      }
+    },
+    {
+      $lookup: {
+        from: "videos",
+        localField: "watchHistory",
+        foreignField: "_id",
+        as: "watchHistory",
+        pipeline: [
+          {
+            $lookup: {
+              from: "users",
+              localField: "owner",
+              foreignField: "_id",
+              as: "owner",
+              pipeline: [
+                {
+                  $project: {
+                    fullName: 1,
+                    username: 1,
+                    avatar: 1
+                  }
+                }
+              ]
+            }
+          },
+          {
+            $addFields: {
+              owner: {
+                $first: "$owner"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ])
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      user[0].watchHistory,
+      "Watch history fetched successfully"
+    )
+  )
+})
+
+export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUsercoverImage, getUserChannelProfile, getWatchHistory }
